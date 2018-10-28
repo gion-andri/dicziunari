@@ -3,7 +3,11 @@ var parse = require('csv-parse');
 var fs = require('fs');
 
 console.time("duration");
-var db = new sqlite3('../ionic-app/www/dicziunari.db');
+var dbDir = '../ionic-app/www';
+if (!fs.existsSync(dbDir)){
+    fs.mkdirSync(dbDir);
+}
+var db = new sqlite3(dbDir+'/dicziunari.db');
 
 function cleanse(record) {
     return Object.keys(record).map(key => {
