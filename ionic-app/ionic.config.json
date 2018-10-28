@@ -1,0 +1,14 @@
+{
+  "name": "dicziunari",
+  "app_id": "9ef02877",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  },
+  "proxies": [
+    {
+      "path": "/api/dicziunari",
+      "proxyUrl": "http://localhost:8080/api/dicziunari/"
+    }
+  ]
+}

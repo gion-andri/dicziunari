@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-navbar>
+      <ion-searchbar (ionInput)="getItems($event)" placeholder="tschertgar"></ion-searchbar>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-item *ngIf="queryCount > 1">{{ queryCount }} resultats</ion-item>
+    <ion-item *ngIf="queryCount === 1">{{ queryCount }} resultat</ion-item>
+    <ion-list>
+      <ion-item *ngFor="let item of items">
+          <ion-row>
+              <ion-col width-50>
+                  {{ item.left }}
+              </ion-col>
+              <ion-col width-50>
+                  {{ item.right }}
+              </ion-col>
+          </ion-row>
+      </ion-item>
+    </ion-list>
+
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>
