@@ -1,5 +1,7 @@
 # Dicziunari
 
+A dictionary application for rumantsch grischun deployable on android/ios with a simple ui or deployable as a node.js backend.
+
 This project should currently be considered as a proof of concept. I had several intentions when I started with it:
 * Provide a simplie dictionary app translating between german and rumantsch.
 * The application should run on both ios and android based devices. To achieve this, I make use of https://ionicframework.com/.
