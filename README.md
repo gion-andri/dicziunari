@@ -44,7 +44,7 @@ node dicziunari-backend.js
 ```
 It will run a webserver serving query requests to the created sqlite database. This is only needed for running the app locally so you can debug/test it in your browser.
 
-In ionic-app, run
+In app, run
 ```
 ionic serve -c
 ```

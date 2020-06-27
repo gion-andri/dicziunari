@@ -9,7 +9,7 @@ const Database = require('better-sqlite3');
 const DB_NAME = 'build/dicziunari.db';
 const TABLE_RUMGR = 'rumgr';
 const FILE_PATH = 'data/rumantschgrischun_data_json.json';
-const finalDirectory = '../ionic-app/www/';
+const finalDirectory = '../app/www/';
 
 let processedEntries = 0;
 const columnList = [

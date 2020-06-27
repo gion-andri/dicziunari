@@ -4,7 +4,7 @@ const app = express();
 const url = require('url');
 const fs = require('fs');
 
-const ionicAppDir = '../ionic-app';
+const ionicAppDir = '../app';
 
 //initializes sqlQueries
 eval(fs.readFileSync(ionicAppDir + '/src/assets/js/dicziunari-queries.js', 'utf8'));
