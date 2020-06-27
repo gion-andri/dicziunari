@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dicziunari-backend.js",
+  "scripts": {
+    "test": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ocaduff/dicziunari.git"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ocaduff/dicziunari/issues"
+  },
+  "homepage": "https://github.com/ocaduff/dicziunari#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "sqlite3": "^4.0.3"
+  }
+}
