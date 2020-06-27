@@ -40,9 +40,11 @@ npm install
 ```
 Then, run
 ```
-node dicziunari-backend.js
+npm run start
 ```
 It will run a webserver serving query requests to the created sqlite database. This is only needed for running the app locally so you can debug/test it in your browser.
+
+### Building the App
 
 In app, run
 ```
