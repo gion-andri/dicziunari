@@ -1,7 +1,8 @@
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
-rumantschgrischun_data_*.*
+data/rumantschgrischun_data_json.json
+build/
 
 *~
 *.sw[mnpcod]

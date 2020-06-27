@@ -9,24 +9,32 @@ This project should currently be considered as a proof of concept. I had several
 
 Dictionary lookup is achieved with an embedded sqlite database leveraging its [FTS5](https://www.sqlite.org/fts5.html) capabilities.
 
-The dictionary data is not included and has to be retrieved as a CSV from [http://www.pledarigrond.ch/rumantschgrischun/](http://www.pledarigrond.ch/rumantschgrischun/)
+
+The dictionary data is not included and has to be retrieved as a JSON file from [http://www.pledarigrond.ch/rumantschgrischun/](http://www.pledarigrond.ch/rumantschgrischun/)
+
 
 ## Prerequisites
 * [Node.js](https://nodejs.org/) and [ionic framework](https://ionicframework.com/docs/cli/#installation) installed
 
 ## Getting up and running
+
+### Preparing the database
+
 In `db-builder`, run
 ```
 npm install
 ```
-Then, copy the csv conaining the dictionary data to `db-builder/rumantschgrischun_data_csv.csv`
+Then, copy the JSON-file conaining the dictionary data to `db-builder/data/rumantschgrischun_data_json.json`
 
 Then, in order to build the database containing the dictionary, run
 ```
-node build-db-dicziunari.js
+npm run convert
 ```
 
-In `backend`, run
+### Running the backend
+
+For local development, you need to run a backend server. To do so, in `backend`, run
+
 ```
 npm install
 ```
