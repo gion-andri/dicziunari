@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Platform, Content, InfiniteScroll, Searchbar} from 'ionic-angular';
 import { LookupService, LocalDbLookupService, RemoteLookupService } from '../../app/lookupService';
+import { Lemma } from '../../app/models/lemma';
 
 @Component({
   selector: 'page-home',
@@ -9,7 +10,7 @@ import { LookupService, LocalDbLookupService, RemoteLookupService } from '../../
 export class HomePage {
 
   lookupService: LookupService;
-  items: any[];
+  items: Lemma[];
   query: string;
   page: number;
   queryCount: number;
@@ -82,17 +83,55 @@ export class HomePage {
     });
   }
 
-  formatRow(row: any) {
-    if (row.direction.indexOf('tu') === 0) {
-      return {
-        left: row.original,
-        right: row.translation
-      };
+  formatRow(row: any): Lemma {
+    let lemma: Lemma = {
+      DStichwort: row.lemma,
+      RStichwort: row.translation,
+      infinitiv: row.infinitiv,
+      preschentsing1: row.preschentsing1,
+      preschentsing2: row.preschentsing2,
+      preschentsing3: row.preschentsing3,
+      preschentplural1: row.preschentplural1,
+      preschentplural2: row.preschentplural2,
+      preschentplural3: row.preschentplural3,
+      imperfectsing1: row.imperfectsing1,
+      imperfectsing2: row.imperfectsing2,
+      imperfectsing3: row.imperfectsing3,
+      imperfectplural1: row.imperfectplural1,
+      imperfectplural2: row.imperfectplural2,
+      imperfectplural3: row.imperfectplural3,
+      participperfectfs: row.participperfectfs,
+      participperfectms: row.participperfectms,
+      participperfectfp: row.participperfectfp,
+      participperfectmp: row.participperfectmp,
+      futursing1: row.futursing1,
+      futursing2: row.futursing2,
+      futursing3: row.futursing3,
+      futurplural1: row.futurplural1,
+      futurplural2: row.futurplural2,
+      futurplural3: row.futurplural3,
+      conjunctivsing1: row.conjunctivsing1,
+      conjunctivsing2: row.conjunctivsing2,
+      conjunctivsing3: row.conjunctivsing3,
+      conjunctivplural1: row.conjunctivplural1,
+      conjunctivplural2: row.conjunctivplural2,
+      conjunctivplural3: row.conjunctivplural3,
+      cundizionalsing1: row.cundizionalsing1,
+      cundizionalsing2: row.cundizionalsing2,
+      cundizionalsing3: row.cundizionalsing3,
+      cundizionalplural1: row.cundizionalplural1,
+      cundizionalplural2: row.cundizionalplural2,
+      cundizionalplural3: row.cundizionalplural3,
+      imperativ1: row.imperativ1,
+      imperativ2: row.imperativ2,
+      gerundium: row.gerundium,
+    };
+    if (row.direction.indexOf('de') === 0) {
+      return lemma;
     } else {
-      return {
-        left: row.translation,
-        right: row.original
-      };
+      lemma.DStichwort = row.translation;
+      lemma.RStichwort = row.lemma;
+      return lemma;
     }
   }
 
