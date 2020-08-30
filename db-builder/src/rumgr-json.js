@@ -5,65 +5,67 @@ const { pick }   = require('stream-json/filters/Pick');
 const { ignore } = require('stream-json/filters/Ignore');
 const { streamArray } = require('stream-json/streamers/StreamArray');
 const Database = require('better-sqlite3');
+const { EBADF } = require('constants');
 
 const DB_NAME = 'build/dicziunari.db';
 const TABLE_RUMGR = 'rumgr';
+const TABLE_RUMGR_IDX = 'rumgr_idx';
 const FILE_PATH = 'data/rumantschgrischun_data_json.json';
 const finalDirectory = '../app/www/';
 
 let processedEntries = 0;
 const columnList = [
-    // R
-    'RStichwort',
-    'RGenus',
+    { colName: 'id',                 colType: 'INTEGER PRIMARY KEY' },
+    { colName: 'lemma',              colType: 'TEXT' },
+    { colName: 'translation',        colType: 'TEXT' },
+    { colName: 'direction',          colType: 'TEXT' },
+    { colName: 'weight',             colType: 'INTEGER' },
 
-    // D
-    'DStichwort',
-    'DGenus',
-
-    // R conj
-    'infinitiv',
-    'preschentsing1',
-    'preschentsing2',
-    'preschentsing3',
-    'preschentplural1',
-    'preschentplural2',
-    'preschentplural3',
-    'imperfectsing1',
-    'imperfectsing2',
-    'imperfectsing3',
-    'imperfectplural1',
-    'imperfectplural2',
-    'imperfectplural3',
-    'participperfectfs',
-    'participperfectms',
-    'participperfectfp',
-    'participperfectmp',
-    'futursing1',
-    'futursing2',
-    'futursing3',
-    'futurplural1',
-    'futurplural2',
-    'futurplural3',
-    'conjunctivsing1',
-    'conjunctivsing2',
-    'conjunctivsing3',
-    'conjunctivplural1',
-    'conjunctivplural2',
-    'conjunctivplural3',
-    'cundizionalsing1',
-    'cundizionalsing2',
-    'cundizionalsing3',
-    'cundizionalplural1',
-    'cundizionalplural2',
-    'cundizionalplural3',
-    'imperativ1',
-    'imperativ2',
-    'gerundium',
+    // conj
+    { colName: 'infinitiv',          colType: 'TEXT' },
+    { colName: 'preschentsing1',     colType: 'TEXT' },
+    { colName: 'preschentsing2',     colType: 'TEXT' },
+    { colName: 'preschentsing3',     colType: 'TEXT' },
+    { colName: 'preschentplural1',   colType: 'TEXT' },
+    { colName: 'preschentplural2',   colType: 'TEXT' },
+    { colName: 'preschentplural3',   colType: 'TEXT' },
+    { colName: 'imperfectsing1',     colType: 'TEXT' },
+    { colName: 'imperfectsing2',     colType: 'TEXT' },
+    { colName: 'imperfectsing3',     colType: 'TEXT' },
+    { colName: 'imperfectplural1',   colType: 'TEXT' },
+    { colName: 'imperfectplural2',   colType: 'TEXT' },
+    { colName: 'imperfectplural3',   colType: 'TEXT' },
+    { colName: 'participperfectfs',  colType: 'TEXT' },
+    { colName: 'participperfectms',  colType: 'TEXT' },
+    { colName: 'participperfectfp',  colType: 'TEXT' },
+    { colName: 'participperfectmp',  colType: 'TEXT' },
+    { colName: 'futursing1',         colType: 'TEXT' },
+    { colName: 'futursing2',         colType: 'TEXT' },
+    { colName: 'futursing3',         colType: 'TEXT' },
+    { colName: 'futurplural1',       colType: 'TEXT' },
+    { colName: 'futurplural2',       colType: 'TEXT' },
+    { colName: 'futurplural3',       colType: 'TEXT' },
+    { colName: 'conjunctivsing1',    colType: 'TEXT' },
+    { colName: 'conjunctivsing2',    colType: 'TEXT' },
+    { colName: 'conjunctivsing3',    colType: 'TEXT' },
+    { colName: 'conjunctivplural1',  colType: 'TEXT' },
+    { colName: 'conjunctivplural2',  colType: 'TEXT' },
+    { colName: 'conjunctivplural3',  colType: 'TEXT' },
+    { colName: 'cundizionalsing1',   colType: 'TEXT' },
+    { colName: 'cundizionalsing2',   colType: 'TEXT' },
+    { colName: 'cundizionalsing3',   colType: 'TEXT' },
+    { colName: 'cundizionalplural1', colType: 'TEXT' },
+    { colName: 'cundizionalplural2', colType: 'TEXT' },
+    { colName: 'cundizionalplural3', colType: 'TEXT' },
+    { colName: 'imperativ1',         colType: 'TEXT' },
+    { colName: 'imperativ2',         colType: 'TEXT' },
+    { colName: 'gerundium',          colType: 'TEXT' },
 ];
 
 let db;
 let insertStatementLemma;
+let insertStatementIdx;
+let id = 1;
 
 function prepareAndClendDb() {
     db = new Database(DB_NAME);
@@ -74,16 +76,20 @@ function prepareAndClendDb() {
     db.pragma("count_changes=OFF");
     db.pragma("journal_mode=MEMORY");
     db.pragma("temp_store=MEMORY");
-    db.exec("DROP TABLE IF EXISTS " + TABLE_RUMGR +" ;");
+
+    db.exec("DROP TABLE IF EXISTS " + TABLE_RUMGR + ";");
+    db.exec("DROP TABLE IF EXISTS " + TABLE_RUMGR_IDX + ";")
 
     // create used columns
-    const columnDef = Array.from(columnList).map(column => column + " TEXT").join(", ");
-    db.exec("CREATE TABLE " + TABLE_RUMGR + "(" +columnDef + ");");
+    const columnDef = columnList.map(column => column.colName + ' ' + column.colType).join(", ");
+    db.exec("CREATE TABLE " + TABLE_RUMGR + "(" + columnDef + ");");
+    db.exec("CREATE VIRTUAL TABLE " + TABLE_RUMGR_IDX + " using fts5(id, keyword);");
 
     // create prepared statement to add each lemma
     insertStatementLemma = db.prepare(
-        "INSERT INTO " + TABLE_RUMGR + " ("+ columnList.join(", ")+") " + 
-        "VALUES ("+Array.from(columnList).map(column => "$"+column).join(", ")+");");
+        "INSERT INTO " + TABLE_RUMGR + " ("+ columnList.map(col => col.colName).join(", ")+") " + 
+        "VALUES (" + Array.from(columnList).map(column => "$"+column.colName).join(", ")+");");
+    insertStatementIdx = db.prepare("INSERT INTO " + TABLE_RUMGR_IDX + " (id, keyword) VALUES (?, ?);");
 
     // start transation
     db.exec("BEGIN TRANSACTION;");
@@ -122,16 +128,35 @@ function handleLemma(lemma) {
     //console.log(lemma);
 
     // filter empty objects
-    if (!Object.keys(lemma).length) {
+    if (!Object.keys(lemma).length || !lemma.DStichwort || !lemma.RStichwort) {
         return;
     }
 
-    ++processedEntries;
+    var origin = expand(lemma.DStichwort);
+    var translation = expand(lemma.RStichwort);
 
     var binds = {};
-    columnList.forEach(column => binds[column] = lemma[column]);
-    insertStatementLemma.run(binds);
+    columnList.forEach(column => binds[column.colName] = lemma[column.colName]);
 
+    binds['id'] = id;
+    binds['lemma'] = lemma.DStichwort + box(lemma.DGenus, ' [', ']');
+    binds['translation'] = lemma.RStichwort + box(lemma.RGenus, ' [', ']');
+    binds['direction'] = 'de_rm-rumgr';
+    binds['weight'] = prio(lemma.DStichwort, lemma.DSubsemantik, lemma.DGenus);
+    insertStatementLemma.run(binds);
+    insertStatementIdx.run(id, origin);
+    id++;
+
+    binds['id'] = id;
+    binds['lemma'] = lemma.RStichwort + box(lemma.RGenus, ' [', ']');
+    binds['translation'] = lemma.DStichwort + box(lemma.DGenus, ' [', ']');
+    binds['direction'] = 'rm-rumgr_de';
+    binds['weight'] = prio(lemma.RStichwort, lemma.RSubsemantik, lemma.RGenus);
+    insertStatementLemma.run(binds);
+    insertStatementIdx.run(id, translation);
+    id++;
+
+    ++processedEntries;
     if (processedEntries % 1000 === 0) {
         console.log('Processed ' + processedEntries + ' lemmas');
     }
@@ -163,14 +188,53 @@ function configurePipeline(pipeline) {
     });
 
     pipeline.on('end', () => {
-        
         finalizeDb();
+        console.timeEnd('duration');
     });
+}
+
+var regexWritings = /(\w+)(?:\(([a-z]+)(?:,-([a-z]+))?\))/g;
+
+function expand(plaid) {
+    var bracketStart = plaid.indexOf('(');
+    if (bracketStart > 0) {
+        var bracketEnd = plaid.lastIndexOf(')');
+        if (bracketEnd < bracketStart) {
+            console.log('encountered expression with strange brackets: ' + plaid);
+            return plaid;
+        }
+        var bracketPart = plaid.substring(bracketStart, bracketEnd);
+        bracketPart = bracketPart.replace(/((pl|f)\W+)/g, ''); // remove 'pl.', 'f.'
+        plaid = plaid.substring(0, bracketStart) + bracketPart + plaid.substring(bracketEnd);
+        var matches;
+        var result = '';
+        var prevEnd = 0;
+        while (matches = regexWritings.exec(plaid)) {
+            result += plaid.substring(prevEnd, matches.index);
+            result += matches[1] + ' ' + matches[1] + matches[2];
+            if (matches[3]) {
+                result += ' ' + matches[1] + matches[3];
+            }
+            prevEnd += matches.index + matches[0].length;
+        }
+        result += plaid.substring(prevEnd);
+        plaid = result;
+    }
+    return plaid;
+}
+
+function box(value, prefix, suffix) {
+    return value? prefix + value + suffix: '';
+}
+
+function prio(stichwort, subsemantik, genus) {
+    return stichwort.length*4 + (subsemantik === null? 0: 1) + (genus === null? 0: 2);
 }
 
 module.exports = {
     main: function () {
         console.log('Start converting JSON file...');
+        console.time('duration');
 
         prepareAndClendDb();
 
