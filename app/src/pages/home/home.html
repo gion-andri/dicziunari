@@ -9,10 +9,13 @@
     <ion-list>
       <ion-item *ngFor="let item of items">
           <ion-row>
-              <ion-col width-50>
+              <ion-col width-45>
                   {{ item.DStichwort }}
               </ion-col>
-              <ion-col width-50>
+              <ion-col width-10>
+                <span *ngIf="item.infinitiv" (click)="showVerb(item)">v</span>
+              </ion-col>
+              <ion-col width-45>
                   {{ item.RStichwort }}
               </ion-col>
           </ion-row>

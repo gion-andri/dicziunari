@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{lemma.RStichwort}}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-row>
+        <ion-col width-50>
+            <b>Preschent</b><br>
+            {{ lemma.preschentsing1 }}<br>
+            {{ lemma.preschentsing2 }}<br>
+            {{ lemma.preschentsing3 }}<br>
+            {{ lemma.preschentplural1 }}<br>
+            {{ lemma.preschentplural2 }}<br>
+            {{ lemma.preschentplural3 }}<br>
+        </ion-col>
+        <ion-col width-50>
+            <b>Imperfect</b><br>
+            {{ lemma.imperfectsing1 }}<br>
+            {{ lemma.imperfectsing2 }}<br>
+            {{ lemma.imperfectsing3 }}<br>
+            {{ lemma.imperfectplural1 }}<br>
+            {{ lemma.imperfectplural2 }}<br>
+            {{ lemma.imperfectplural3 }}<br>
+        </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col width-50>
+          <b>Conjunctiv</b><br>
+          {{ lemma.conjunctivsing1 }}<br>
+          {{ lemma.conjunctivsing2 }}<br>
+          {{ lemma.conjunctivsing3 }}<br>
+          {{ lemma.conjunctivplural1 }}<br>
+          {{ lemma.conjunctivplural2 }}<br>
+          {{ lemma.conjunctivplural3 }}<br>
+      </ion-col>
+      <ion-col width-50>
+          <b>Cundiziunal</b><br>
+          {{ lemma.cundizionalsing1 }}<br>
+          {{ lemma.cundizionalsing2 }}<br>
+          {{ lemma.cundizionalsing3 }}<br>
+          {{ lemma.cundizionalplural1 }}<br>
+          {{ lemma.cundizionalplural2 }}<br>
+          {{ lemma.cundizionalplural3 }}<br>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col width-50>
+          <b>Futur</b><br>
+          {{ lemma.futursing1 }}<br>
+          {{ lemma.futursing2 }}<br>
+          {{ lemma.futursing3 }}<br>
+          {{ lemma.futurplural1 }}<br>
+          {{ lemma.futurplural2 }}<br>
+          {{ lemma.futurplural3 }}<br>
+      </ion-col>
+      <ion-col width-50>
+          <b>Particip Perfect</b><br>
+          {{ lemma.participperfectms }}<br>
+          {{ lemma.participperfectfs }}<br>
+          {{ lemma.participperfectmp }}<br>
+          {{ lemma.participperfectfp }}<br>
+      </ion-col>
+   </ion-row>
+
+   <ion-row>
+    <ion-col width-50>
+        <b>Imperativ</b><br>
+        {{lemma.imperativ1}}<br>
+        {{lemma.imperativ2}}
+    </ion-col>
+    <ion-col width-50>
+        <b>Gerundi</b><br>
+        {{lemma.gerundium}}<br>
+    </ion-col>
+  </ion-row>
+</ion-item>
+</ion-content>

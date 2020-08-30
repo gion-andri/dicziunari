@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Platform, Content, InfiniteScroll, Searchbar} from 'ionic-angular';
+import { NavController, Platform, Content, InfiniteScroll, Searchbar, ModalController} from 'ionic-angular';
 import { LookupService, LocalDbLookupService, RemoteLookupService } from '../../app/lookupService';
 import { Lemma } from '../../app/models/lemma';
+import { ConjugationPage } from '../conjugation/conjugation';
 
 @Component({
   selector: 'page-home',
@@ -18,7 +19,11 @@ export class HomePage {
   @ViewChild(InfiniteScroll) infiniteScroll: InfiniteScroll;
   @ViewChild(Searchbar) searchbar: Searchbar;
 
-  constructor(public navCtrl: NavController, public platform: Platform) {
+  constructor(
+    public navCtrl: NavController,
+    public platform: Platform,
+    private modalController: ModalController,
+    ) {
     let self = this;
     this.platform.ready().then(() => {
       if (this.platform.is('cordova')) {
@@ -139,4 +144,8 @@ export class HomePage {
     return value? prefix + value + suffix: '';
   }
 
+  showVerb(item: Lemma) {
+    const modal = this.modalController.create(ConjugationPage, { lemma: item });
+    return modal.present();
+  }
 }
